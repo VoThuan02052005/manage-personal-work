@@ -9,8 +9,11 @@ import StatsPage from './pages/StatsPage';
 import SettingsPage from './pages/SettingsPage';
 import TaskFormModal from './components/tasks/TaskFormModal';
 import PomodoroTimer from './components/common/PomodoroTimer';
+import LoginPage from './pages/LoginPage';
+import { useTasks } from './context/TaskContext';
 
 function AppContent() {
+  const { user } = useTasks();
   const [activePage, setActivePage] = useState('dashboard');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editTaskData, setEditTaskData] = useState(null);
@@ -53,7 +56,7 @@ function AppContent() {
           />
         );
       case 'stats':
-        return <StatsPage />;
+        return <StatsPage setActivePage={setActivePage} />;
       case 'settings':
         return <SettingsPage />;
       default:
@@ -66,6 +69,10 @@ function AppContent() {
         );
     }
   };
+
+  if (!user) {
+    return <LoginPage />;
+  }
 
   return (
     <div className="app-container">

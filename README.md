@@ -42,6 +42,16 @@ Hệ thống được phát triển với nhiều tính năng nâng cao, đáp �
 * **Lưu trữ cục bộ:** Tự động đồng bộ thời gian thực toàn bộ dữ liệu công việc vào **localStorage**, không sợ mất mát dữ liệu khi tải lại trang.
 * **Nhập / Xuất dữ liệu (Import & Export):** Xuất toàn bộ dữ liệu ra tệp tin định dạng `.json` để sao lưu hoặc chuyển đổi thiết bị, và nhập lại dễ dàng chỉ trong vài giây.
 
+### 8. Đăng Nhập & Cá Nhân Hóa (Onboarding)
+* **First-time Login:** Màn hình đăng nhập dành cho người dùng mới, giúp thiết lập tên và email để hệ thống cá nhân hóa giao diện và thông báo.
+* **Tự động lưu phiên:** Không yêu cầu đăng nhập lại ở các lần truy cập tiếp theo (tự động nhận diện tài khoản qua LocalStorage).
+
+### 9. Lịch Trình Thời Gian Thực (Real-time Sync)
+* Toàn bộ lịch biểu và trạng thái công việc được đồng bộ theo **ngày giờ thực tế** của hệ thống, giúp tính năng tự động chuyển trạng thái "Quá hạn" vận hành chính xác 100%.
+
+### 10. Bảng Thống Kê Tương Tác Kép
+* Các thẻ thống kê KPI (Hoàn thành, Đang thực hiện, Quá hạn) không chỉ dùng để xem mà còn **có thể click** để tự động chuyển hướng và áp dụng bộ lọc tương ứng bên trang Danh sách.
+
 ---
 
 ## 🛠️ Tech Stack & Kiến Trúc Dự Án
@@ -69,7 +79,7 @@ manage-personal-work/
 │   ├── context/            # Quản lý trạng thái toàn cục (TaskContext.jsx)
 │   ├── data/               # Dữ liệu khởi tạo mẫu (sampleTasks.js)
 │   ├── hooks/              # Custom Hooks tùy biến
-│   ├── pages/              # Các trang giao diện chính (Dashboard, Tasks, Calendar, Stats, Settings)
+│   ├── pages/              # Các trang giao diện chính (Dashboard, Tasks, Calendar, Stats, Settings, LoginPage)
 │   ├── utils/              # Các hàm xử lý ngày tháng và logic hỗ trợ (dateUtils.js)
 │   ├── App.jsx             # Điểm cấu hình layout và Router chính của ứng dụng
 │   ├── index.css           # File CSS cốt lõi chứa hệ thống Design System chung

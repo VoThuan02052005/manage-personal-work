@@ -1,0 +1,51 @@
+\section{Giới thiệu}
+
+\subsection{Lý do chọn đề tài và Mô tả bài toán}
+Trong kỷ nguyên công nghệ số 4.0, nhịp sống ngày càng trở nên hối hả, khối lượng công việc và thông tin mà một cá nhân phải tiếp nhận và xử lý mỗi ngày tăng lên theo cấp số nhân. Một người trưởng thành trung bình không chỉ phải đối mặt với các áp lực từ công việc chính, mà còn có các nhiệm vụ học tập, phát triển bản thân, gia đình và các mối quan hệ xã hội. Điều này dẫn đến hiện trạng "quá tải nhận thức", khi mà bộ não con người không thể cùng lúc ghi nhớ và theo dõi sát sao tất cả mọi thứ.
+
+Việc thiếu đi một công cụ quản lý thống nhất và khoa học thường dẫn đến các hậu quả như:
+\begin{itemize}
+    \item \textbf{Trễ hạn (Missed Deadlines):} Quên mất các công việc quan trọng hoặc không ước lượng đúng thời gian cần thiết để hoàn thành chúng.
+    \item \textbf{Mất cân bằng (Work-life Imbalance):} Phân bổ thời gian không đồng đều, dành quá nhiều thời gian cho các tác vụ vô bổ và bỏ bê các mục tiêu dài hạn.
+    \item \textbf{Suy giảm hiệu suất:} Bị phân tâm liên tục (Context switching), mất tập trung khi làm việc.
+\end{itemize}
+
+Xuất phát từ thực tiễn đó, bài toán đặt ra là làm thế nào để xây dựng một giải pháp phần mềm hỗ trợ cá nhân ghi chép, lập lịch, nhắc nhở và tối ưu hóa thời gian một cách tự động và trực quan nhất.
+
+\subsection{Mục đích hệ thống}
+Hệ thống \textbf{Personal Work Manager} được ra đời với các mục tiêu cốt lõi sau:
+\begin{itemize}
+    \item \textbf{Số hóa và tập trung hóa thông tin:} Cung cấp một nền tảng duy nhất để người dùng lưu trữ toàn bộ các công việc cần làm (To-do lists), thay thế cho giấy nhớ truyền thống hay các ứng dụng ghi chú rời rạc.
+    \item \textbf{Phân loại và phân thứ bậc ưu tiên:} Ứng dụng ma trận Eisenhower để chia công việc thành các mức độ ưu tiên (Cao, Trung bình, Thấp), giúp người dùng luôn biết nên tập trung vào việc gì trước.
+    \item \textbf{Tự động hóa luồng công việc:} Tự động sinh ra các công việc lặp lại (hàng ngày, hàng tuần, hàng tháng) mà không cần người dùng phải nhập lại từ đầu, đồng thời tự động phát hiện và cảnh báo các công việc đã quá hạn.
+    \item \textbf{Nâng cao năng suất bằng khoa học:} Tích hợp đồng hồ đếm ngược Pomodoro (chia thời gian làm việc thành các block 25 phút) nhằm tối đa hóa sự tập trung và giảm thiểu sự mệt mỏi của não bộ.
+\end{itemize}
+
+\subsection{Phạm vi hệ thống}
+Để đảm bảo tính khả thi và tập trung vào trải nghiệm cốt lõi, phạm vi của hệ thống trong giai đoạn phát triển này được xác định như sau:
+\begin{itemize}
+    \item \textbf{Nền tảng hoạt động:} Ứng dụng Web tĩnh (Single Page Application - SPA) có khả năng tương thích với mọi trình duyệt web hiện đại trên cả máy tính (Desktop) và thiết bị di động (Mobile).
+    \item \textbf{Kiến trúc dữ liệu:} Hệ thống hoạt động độc lập (offline-first) bằng cách tận dụng công nghệ LocalStorage của HTML5. Không sử dụng Server hay Database tập trung nhằm đảm bảo tính bảo mật và quyền riêng tư tuyệt đối cho dữ liệu cá nhân của người dùng.
+    \item \textbf{Phạm vi người dùng:} Hệ thống được thiết kế chuyên biệt cho cá nhân (Single-user mode). Không bao gồm các tính năng phân quyền phức tạp hay làm việc nhóm (Collaborative workspace).
+\end{itemize}
+
+\subsection{Đối tượng sử dụng}
+Hệ thống hướng tới tập khách hàng vô cùng đa dạng, cụ thể bao gồm:
+\begin{itemize}
+    \item \textbf{Học sinh, sinh viên:} Cần quản lý bài tập về nhà, lịch học thêm, lịch nộp tiểu luận, ôn thi, và các hoạt động ngoại khóa.
+    \item \textbf{Nhân viên văn phòng:} Cần ghi chú các cuộc họp, deadline báo cáo, xử lý email, và theo dõi các chỉ số KPI cá nhân.
+    \item \textbf{Lập trình viên và Freelancers:} Quản lý các module code cần viết, lịch hẹn với khách hàng, các task fix bug theo độ ưu tiên.
+    \item \textbf{Người nội trợ và cá nhân nói chung:} Lập danh sách đi chợ, các công việc dọn dẹp định kỳ (nhắc nhở dọn nhà hàng tuần), lịch khám sức khỏe.
+\end{itemize}
+
+\subsection{Từ điển thuật ngữ}
+Để thuận tiện cho việc theo dõi nội dung của báo cáo, một số thuật ngữ chuyên ngành được giải thích như sau:
+\begin{itemize}
+    \item \textbf{SDLC (Software Development Life Cycle):} Vòng đời phát triển phần mềm, quy trình chuẩn hóa bao gồm các bước từ khảo sát, phân tích, thiết kế, lập trình đến kiểm thử và bảo trì.
+    \item \textbf{SPA (Single Page Application):} Ứng dụng web trang đơn, một cấu trúc web trong đó tất cả các thao tác chuyển trang và kết xuất dữ liệu đều diễn ra tại máy khách (Client) thông qua JavaScript mà không cần tải lại trang.
+    \item \textbf{React / Context API:} Thư viện JavaScript của Meta dùng để xây dựng giao diện người dùng. Context API là cơ chế tích hợp sẵn giúp quản lý trạng thái (state) xuyên suốt ứng dụng.
+    \item \textbf{LocalStorage:} Bộ nhớ cục bộ được cung cấp bởi trình duyệt web, cho phép lưu trữ dữ liệu vĩnh viễn (lên đến 5MB-10MB) dưới dạng key-value, dữ liệu không bị mất khi tắt máy.
+    \item \textbf{Pomodoro Technique:} Phương pháp quản lý thời gian do Francesco Cirillo phát triển, sử dụng đồng hồ để chia nhỏ công việc thành các khoảng thời gian (thường là 25 phút), xen kẽ bởi các khoảng nghỉ ngắn.
+    \item \textbf{JSON (JavaScript Object Notation):} Định dạng lưu trữ và truyền tải dữ liệu có cấu trúc nhẹ, dễ đọc đối với cả con người và máy móc.
+    \item \textbf{CRUD:} Bốn thao tác cơ sở của mọi hệ quản trị dữ liệu: Create (Tạo), Read (Đọc), Update (Sửa), Delete (Xóa).
+\end{itemize}

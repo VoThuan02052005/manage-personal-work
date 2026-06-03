@@ -2,7 +2,7 @@
 // Được định nghĩa động dựa trên ngày hiện tại để demo trực quan nhất
 
 const getRelativeDate = (offsetDays) => {
-  const date = new Date("2026-05-18"); // Lấy mốc thời gian hiện tại của hệ thống từ metadata
+  const date = new Date(); // Lấy mốc thời gian hiện tại của hệ thống
   date.setDate(date.getDate() + offsetDays);
   return date.toISOString().split('T')[0]; // Định dạng YYYY-MM-DD
 };

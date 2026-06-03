@@ -2,13 +2,19 @@ import React from 'react';
 import { ClipboardList, CheckCircle2, PlayCircle, AlertCircle } from 'lucide-react';
 import { useTasks } from '../../context/TaskContext';
 
-export default function StatsOverview() {
+export default function StatsOverview({ onCardClick }) {
   const { stats } = useTasks();
 
   return (
     <div className="dashboard-grid">
       {/* Tổng công việc */}
-      <div className="kpi-card kpi-total">
+      <div 
+        className="kpi-card kpi-total" 
+        onClick={() => onCardClick && onCardClick('Tất cả')} 
+        style={{ cursor: onCardClick ? 'pointer' : 'default', transition: 'transform 0.2s' }}
+        onMouseOver={(e) => onCardClick && (e.currentTarget.style.transform = 'scale(1.02)')}
+        onMouseOut={(e) => onCardClick && (e.currentTarget.style.transform = 'scale(1)')}
+      >
         <div className="kpi-icon-box">
           <ClipboardList size={24} />
         </div>
@@ -19,7 +25,13 @@ export default function StatsOverview() {
       </div>
 
       {/* Đã hoàn thành */}
-      <div className="kpi-card kpi-completed">
+      <div 
+        className="kpi-card kpi-completed"
+        onClick={() => onCardClick && onCardClick('Hoàn thành')} 
+        style={{ cursor: onCardClick ? 'pointer' : 'default', transition: 'transform 0.2s' }}
+        onMouseOver={(e) => onCardClick && (e.currentTarget.style.transform = 'scale(1.02)')}
+        onMouseOut={(e) => onCardClick && (e.currentTarget.style.transform = 'scale(1)')}
+      >
         <div className="kpi-icon-box">
           <CheckCircle2 size={24} />
         </div>
@@ -30,7 +42,13 @@ export default function StatsOverview() {
       </div>
 
       {/* Đang thực hiện */}
-      <div className="kpi-card kpi-active">
+      <div 
+        className="kpi-card kpi-active"
+        onClick={() => onCardClick && onCardClick('Đang thực hiện')} 
+        style={{ cursor: onCardClick ? 'pointer' : 'default', transition: 'transform 0.2s' }}
+        onMouseOver={(e) => onCardClick && (e.currentTarget.style.transform = 'scale(1.02)')}
+        onMouseOut={(e) => onCardClick && (e.currentTarget.style.transform = 'scale(1)')}
+      >
         <div className="kpi-icon-box">
           <PlayCircle size={24} />
         </div>
@@ -41,7 +59,13 @@ export default function StatsOverview() {
       </div>
 
       {/* Quá hạn */}
-      <div className="kpi-card kpi-overdue">
+      <div 
+        className="kpi-card kpi-overdue"
+        onClick={() => onCardClick && onCardClick('Quá hạn')} 
+        style={{ cursor: onCardClick ? 'pointer' : 'default', transition: 'transform 0.2s' }}
+        onMouseOver={(e) => onCardClick && (e.currentTarget.style.transform = 'scale(1.02)')}
+        onMouseOut={(e) => onCardClick && (e.currentTarget.style.transform = 'scale(1)')}
+      >
         <div className="kpi-icon-box">
           <AlertCircle size={24} />
         </div>

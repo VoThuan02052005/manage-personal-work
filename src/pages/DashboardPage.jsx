@@ -8,7 +8,14 @@ import Calendar from '../components/calendar/Calendar';
 import TaskItem from '../components/tasks/TaskItem';
 
 export default function DashboardPage({ onAddTask, onEditTask, setActivePage }) {
-  const { tasks, selectedDate, setSelectedDate, CURRENT_DATE } = useTasks();
+  const { tasks, selectedDate, setSelectedDate, CURRENT_DATE, setFilterStatus, user } = useTasks();
+  
+  const handleStatsClick = (status) => {
+    if (setActivePage) {
+      setFilterStatus(status);
+      setActivePage('tasks');
+    }
+  };
 
   // Đặt lại ngày được chọn về hôm nay khi mở dashboard để xem "Công việc hôm nay"
   React.useEffect(() => {
@@ -25,7 +32,7 @@ export default function DashboardPage({ onAddTask, onEditTask, setActivePage }) 
       {/* 1. Header Trang */}
       <div className="page-header">
         <div className="page-header-info">
-          <h2 className="page-title">Chào buổi sáng, Thuan! 👋</h2>
+          <h2 className="page-title">Chào buổi sáng, {user ? user.username : 'bạn'}! 👋</h2>
           <p className="page-subtitle">Hôm nay là {formatViDate(CURRENT_DATE)}</p>
         </div>
         <button className="btn btn-primary" onClick={() => onAddTask()}>
@@ -34,7 +41,7 @@ export default function DashboardPage({ onAddTask, onEditTask, setActivePage }) 
       </div>
 
       {/* 2. Thống kê KPI Cards */}
-      <StatsOverview />
+      <StatsOverview onCardClick={handleStatsClick} />
 
       {/* 3. Bố cục hai cột chính */}
       <div className="dashboard-layout-grid">

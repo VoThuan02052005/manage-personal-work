@@ -28,7 +28,11 @@ export const isSameDay = (dateStr1, dateStr2) => {
 };
 
 // Kiểm tra ngày có trước hôm nay không (quá hạn)
-export const isBeforeToday = (dateStr, todayStr = "2026-05-18") => {
+export const isBeforeToday = (dateStr, todayStr) => {
+  if (!todayStr) {
+    const d = new Date();
+    todayStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
   if (!dateStr) return false;
   const d1 = new Date(dateStr.split('T')[0]);
   const d2 = new Date(todayStr);

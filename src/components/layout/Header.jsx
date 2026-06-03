@@ -3,7 +3,7 @@ import { Search, Bell, Sun, Moon } from 'lucide-react';
 import { useTasks } from '../../context/TaskContext';
 
 export default function Header() {
-  const { searchQuery, setSearchQuery, stats } = useTasks();
+  const { searchQuery, setSearchQuery, stats, user } = useTasks();
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('task-manager-theme') || 'light';
   });
@@ -44,11 +44,11 @@ export default function Header() {
         {/* Profile người dùng */}
         <div className="profile">
           <div className="avatar-wrapper">
-            <div className="avatar">T</div>
+            <div className="avatar">{user ? user.username.charAt(0).toUpperCase() : 'U'}</div>
             <span className="status-dot"></span>
           </div>
           <div className="profile-info">
-            <span className="profile-name">Thuan</span>
+            <span className="profile-name">{user ? user.username : 'User'}</span>
             <span className="profile-status">Online</span>
           </div>
         </div>

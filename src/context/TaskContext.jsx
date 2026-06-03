@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import { sampleTasks } from '../data/sampleTasks';
+
 import { isBeforeToday, isSameDay, getNextOccurrenceDate } from '../utils/dateUtils';
 
 const TaskContext = createContext();
@@ -7,10 +7,15 @@ const TaskContext = createContext();
 export const useTasks = () => useContext(TaskContext);
 
 export const TaskProvider = ({ children }) => {
-  const CURRENT_DATE = "2026-05-18"; // Ngày hệ thống hiện tại
+  // Sử dụng thời gian thực tế của hệ thống
+  const systemToday = new Date();
+  const yyyy = systemToday.getFullYear();
+  const mm = String(systemToday.getMonth() + 1).padStart(2, '0');
+  const dd = String(systemToday.getDate()).padStart(2, '0');
+  const CURRENT_DATE = `${yyyy}-${mm}-${dd}`;
   
   const [tasks, setTasks] = useState(() => {
-    const saved = localStorage.getItem('task-manager-tasks');
+    const saved = localStorage.getItem('task-manager-tasks-v2');
     if (saved) {
       try {
         return JSON.parse(saved);
@@ -18,9 +23,20 @@ export const TaskProvider = ({ children }) => {
         console.error("Lỗi parse tasks từ localStorage", e);
       }
     }
-    // Gán trường repeat mặc định cho sample tasks
-    return sampleTasks.map(t => ({ ...t, repeat: t.repeat || "Không lặp" }));
+    // Trả về mảng rỗng thay vì dữ liệu mẫu
+    return [];
   });
+
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem('task-manager-user');
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
+
+  const loginUser = (username, email) => {
+    const userData = { username, email };
+    setUser(userData);
+    localStorage.setItem('task-manager-user', JSON.stringify(userData));
+  };
 
   const [selectedDate, setSelectedDate] = useState(CURRENT_DATE);
   const [searchQuery, setSearchQuery] = useState("");
@@ -52,9 +68,9 @@ export const TaskProvider = ({ children }) => {
 
     if (changed) {
       setTasks(updatedTasks);
-      localStorage.setItem('task-manager-tasks', JSON.stringify(updatedTasks));
+      localStorage.setItem('task-manager-tasks-v2', JSON.stringify(updatedTasks));
     } else {
-      localStorage.setItem('task-manager-tasks', JSON.stringify(tasks));
+      localStorage.setItem('task-manager-tasks-v2', JSON.stringify(tasks));
     }
   }, [tasks]);
 
@@ -214,7 +230,7 @@ export const TaskProvider = ({ children }) => {
         }));
 
         setTasks(sanitized);
-        localStorage.setItem('task-manager-tasks', JSON.stringify(sanitized));
+        localStorage.setItem('task-manager-tasks-v2', JSON.stringify(sanitized));
         return true;
       }
       return false;
@@ -268,7 +284,9 @@ export const TaskProvider = ({ children }) => {
       exportTasksData,
       importTasksData,
       stats,
-      CURRENT_DATE
+      CURRENT_DATE,
+      user,
+      loginUser
     }}>
       {children}
     </TaskContext.Provider>

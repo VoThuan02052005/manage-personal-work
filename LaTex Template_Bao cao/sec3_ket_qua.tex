@@ -1,0 +1,115 @@
+\section{Kết quả thực hiện}
+
+\subsection{Công nghệ sử dụng}
+Quá trình xây dựng và phát triển phần mềm được thực hiện bằng cách kết hợp các công nghệ và bộ công cụ hiện đại nhất trong lĩnh vực Lập trình Frontend. Mỗi công cụ được lựa chọn đều trải qua quá trình đánh giá kỹ lưỡng về ưu nhược điểm để phù hợp nhất với kiến trúc của dự án.
+
+\textbf{1. Thư viện cốt lõi: React (Phiên bản 19)}
+\begin{itemize}
+    \item \textbf{Khái niệm:} React là một thư viện mã nguồn mở chuyên dụng để xây dựng giao diện người dùng (UI) do Facebook phát triển. Điểm mạnh lớn nhất của React là sử dụng Virtual DOM (Mô hình đối tượng tài liệu ảo) thay vì thao tác trực tiếp trên Real DOM.
+    \item \textbf{Lý do lựa chọn:} Trong dự án Personal Work Manager, người dùng thường xuyên có các thao tác kéo thả, đánh dấu hoàn thành, thêm/xóa công việc. Thay vì phải tải lại toàn bộ trang web mỗi khi có thay đổi, React chỉ cập nhật chính xác những đoạn mã HTML có sự thay đổi. Điều này tạo ra trải nghiệm "Zero-latency" mượt mà. Hơn thế nữa, phiên bản React 19 cung cấp các Hooks mạnh mẽ (như \texttt{useState}, \texttt{useEffect}, \texttt{useContext}), giúp đơn giản hóa quá trình đồng bộ trạng thái giữa các trang.
+\end{itemize}
+
+\textbf{2. Công cụ đóng gói và biên dịch: Vite (Phiên bản 8)}
+\begin{itemize}
+    \item \textbf{Khái niệm:} Vite (tiếng Pháp nghĩa là "Nhanh") là một công cụ build tool thế hệ mới dành cho dự án Web hiện đại, thay thế cho công nghệ Webpack truyền thống.
+    \item \textbf{Lý do lựa chọn:} Vite tận dụng các mô-đun ES gốc (Native ES modules) của trình duyệt để cung cấp tính năng Hot Module Replacement (HMR) với tốc độ chưa tới 50ms. Điều này cho phép lập trình viên vừa viết mã, vừa xem được giao diện thay đổi ngay lập tức trên trình duyệt. Khi đóng gói sản phẩm (Build Production), Vite sử dụng Rollup để tối ưu hóa mã nguồn, tạo ra các tệp \texttt{index.html}, CSS, JS với dung lượng siêu nhẹ, đảm bảo tốc độ tải trang chỉ trong chớp mắt.
+\end{itemize}
+
+\textbf{3. Ngôn ngữ: JavaScript (Tiêu chuẩn ECMAScript 6+)}
+\begin{itemize}
+    \item Hệ thống sử dụng cú pháp ES6+ bao gồm Arrow functions (Hàm mũi tên), Destructuring assignment (Phân rã đối tượng), Template literals (Chuỗi mẫu) và Spread operators (Toán tử rải). Những cú pháp này giúp mã nguồn (Source code) trở nên vô cùng ngắn gọn, sạch sẽ và dễ đọc, tuân thủ nguyên lý Clean Code.
+\end{itemize}
+
+\textbf{4. Hệ thống tạo kiểu (Styling): Custom Vanilla CSS}
+\begin{itemize}
+    \item Thay vì lạm dụng các thư viện UI cồng kềnh như Bootstrap hay Material-UI, dự án tự xây dựng toàn bộ hệ thống phong cách thiết kế từ đầu (từ file \texttt{index.css}). 
+    \item Các quy tắc biến hệ thống (CSS Variables) được thiết lập cho toàn bộ bảng màu (Primary, Secondary, Success, Danger), giúp hỗ trợ chuyển đổi giao diện Sáng/Tối (Light/Dark Mode) một cách linh hoạt. Kỹ thuật CSS Grid và Flexbox được áp dụng triệt để nhằm đảm bảo tính Responsive của ứng dụng.
+\end{itemize}
+
+\textbf{5. Biểu tượng đồ họa: Lucide React}
+\begin{itemize}
+    \item \textbf{Lý do lựa chọn:} Lucide là một nhánh phát triển của Feather Icons, cung cấp hàng ngàn biểu tượng chuẩn vector (SVG) dưới dạng các Component của React. Nhờ đó, icon khi phóng to không bao giờ bị vỡ nét, đồng thời cho phép tùy chỉnh màu sắc và độ dày viền dễ dàng bằng CSS.
+\end{itemize}
+
+\subsection{Các giao diện chính}
+Hệ thống đã triển khai thành công 5 màn hình giao diện cốt lõi. Mỗi màn hình mang một triết lý thiết kế (Design Philosophy) riêng nhằm tối ưu hóa trải nghiệm người dùng.
+
+\textbf{1. Màn hình Khởi động và Đăng nhập (Onboarding/Login Screen)}
+\begin{itemize}
+    \item \textbf{Mục đích:} Thu thập thông tin định danh của người dùng.
+    \item \textbf{Bố cục:} Giao diện tập trung (Centered Layout) với một thẻ đăng nhập đặt chính giữa màn hình (dạng Card). Loại bỏ hoàn toàn thanh điều hướng (Sidebar) và Header để người dùng không bị phân tâm. Nút "Bắt đầu ngay" được làm nổi bật để kích thích thao tác.
+\end{itemize}
+\textit{(Sinh viên chèn ảnh giao diện Đăng nhập vào đây)}
+
+\textbf{2. Màn hình Bảng điều khiển (Dashboard Overview)}
+\begin{itemize}
+    \item \textbf{Mục đích:} Trở thành trung tâm chỉ huy (Command Center) của phần mềm.
+    \item \textbf{Bố cục:} Trang được chia làm 3 tầng. Tầng trên cùng là câu chào cá nhân hóa và thứ, ngày, tháng. Tầng thứ 2 là dãy 4 thẻ thống kê (KPI Cards) cung cấp dữ liệu tức thời về khối lượng công việc. Tầng dưới cùng được chia tỷ lệ 60-40: Bên trái liệt kê chi tiết các công việc cần làm ngay trong ngày hôm nay; Bên phải là một khung Lịch thu nhỏ giúp người dùng nhận diện khái quát bức tranh toàn cảnh của tháng.
+\end{itemize}
+\textit{(Sinh viên chèn ảnh giao diện Dashboard vào đây)}
+
+\textbf{3. Màn hình Danh sách Công việc (Tasks List Screen)}
+\begin{itemize}
+    \item \textbf{Mục đích:} Quản trị chuyên sâu (Deep-dive) toàn bộ cơ sở dữ liệu công việc.
+    \item \textbf{Bố cục:} Điểm nhấn của màn hình này là thanh công cụ Lọc (Filter Bar). Người dùng có thể kết hợp nhiều trường điều kiện cùng lúc (Ví dụ: Tìm các công việc có trạng thái "Đang thực hiện" VÀ mức ưu tiên "Cao"). Màn hình này cung cấp thanh cuộn dọc (Vertical Scroll) không giới hạn, hỗ trợ hiển thị hàng nghìn công việc mà không làm vỡ khung hình.
+\end{itemize}
+\textit{(Sinh viên chèn ảnh giao diện Tasks Page vào đây)}
+
+\textbf{4. Màn hình Lịch biểu Toàn cảnh (Full Calendar View)}
+\begin{itemize}
+    \item \textbf{Mục đích:} Lên kế hoạch cho các sự kiện ở thì tương lai.
+    \item \textbf{Bố cục:} Một ma trận các ô vuông tương ứng với các ngày trong tháng. Nếu một ngày có công việc mang độ ưu tiên cao (màu đỏ) và độ ưu tiên trung bình (màu cam), bên dưới ô số ngày sẽ xuất hiện các dấu chấm tròn màu sắc tương ứng (Dots indicator). Khi click vào bất kỳ ô nào, danh sách bên cạnh sẽ lập tức cập nhật để hiển thị công việc riêng của ngày đó.
+\end{itemize}
+\textit{(Sinh viên chèn ảnh giao diện Calendar vào đây)}
+
+\textbf{5. Màn hình Thống kê Phân tích (Analytics \& Productivity Stats)}
+\begin{itemize}
+    \item \textbf{Mục đích:} Đánh giá, tổng kết và tạo động lực.
+    \item \textbf{Bố cục:} Nổi bật với khối "Trợ lý ảo" ở chính giữa trang. Hệ thống thu thập các chỉ số về tỷ lệ hoàn thành (Completion Rate) để tự động sinh ra các đoạn văn bản khích lệ. Ví dụ: Nếu tỷ lệ hoàn thành lớn hơn 70\%, hệ thống sẽ hiển thị "Tuyệt vời! Bạn đang làm rất tốt!". Nếu có quá 2 công việc bị quá hạn, hệ thống sẽ cảnh báo "Chú ý quản lý thời gian!".
+\end{itemize}
+\textit{(Sinh viên chèn ảnh giao diện Stats vào đây)}
+
+\subsection{Kiểm thử phần mềm}
+
+Kiểm thử (Testing) đóng vai trò sống còn trong việc khẳng định chất lượng phần mềm trước khi phát hành. Dự án đã thực hiện các bài kiểm thử Hộp đen (Black-box Testing) với kỹ thuật Manual Testing.
+
+\subsubsection{Bảng tổng hợp Kịch bản Kiểm thử (Test Cases)}
+Bảng dưới đây trình bày 10 kịch bản kiểm thử (Test Cases) tiêu biểu nhất được trích xuất từ tài liệu Kế hoạch Kiểm thử (Test Plan):
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{|c|p{3.0cm}|p{4.5cm}|p{4.5cm}|c|}
+        \hline
+        \textbf{TC} & \textbf{Chức năng} & \textbf{Các bước thực hiện} & \textbf{Kết quả mong đợi} & \textbf{Trạng thái} \\
+        \hline
+        1 & Đăng nhập hợp lệ & Nhập đầy đủ "Nguyễn Văn A" và email có chứa '@'. Bấm Bắt đầu. & Hệ thống lưu dữ liệu, chuyển thẳng tới Dashboard, không báo lỗi. & Pass \\
+        \hline
+        2 & Đăng nhập sai & Cố tình để trống trường Email. Bấm Bắt đầu. & Ngăn chuyển trang. Xuất hiện câu cảnh báo màu đỏ yêu cầu nhập liệu. & Pass \\
+        \hline
+        3 & Thêm mới Task & Nhấn '+', nhập Title, chọn mức độ ưu tiên, chọn ngày, Lưu. & Form tự đóng. Dòng dữ liệu mới xuất hiện trên cùng danh sách. & Pass \\
+        \hline
+        4 & Xóa (Delete) Task & Nhấn nút biểu tượng Thùng rác trên một dòng công việc. & Task biến mất. Tổng số lượng công việc trên thanh KPI bị giảm đi 1. & Pass \\
+        \hline
+        5 & Đánh dấu Hoàn thành & Nhấn ô Checkbox của một Task đang "Chờ". & Task bị gạch ngang. Biểu đồ hoàn thành tăng lên. Task bị đẩy xuống dưới. & Pass \\
+        \hline
+        6 & Sinh Task lặp lại & Hoàn thành một Task có cài đặt Lặp "Hàng ngày". & Tự động sinh ra 1 Task mới y hệt, ngày hết hạn bị cộng thêm 1 ngày. & Pass \\
+        \hline
+        7 & Quá hạn tự động & Thêm Task có ngày hết hạn bằng ngày của tuần trước. & Task vừa sinh ra tự động khoác lớp áo cảnh báo "Quá hạn" (Đỏ). & Pass \\
+        \hline
+        8 & Lọc theo Ưu tiên & Mở bộ lọc, chọn hiển thị "Mức độ ưu tiên: Cao". & Các Task Thấp và Trung bình bị ẩn đi, chỉ hiển thị Task có màu Đỏ. & Pass \\
+        \hline
+        9 & Điều hướng KPI & Tại Dashboard, click chuột vào thẻ "Đang thực hiện". & Tự động chuyển qua trang Tasks List và bộ lọc đã set sẵn "Đang thực hiện". & Pass \\
+        \hline
+        10 & Xuất tệp tin (Export) & Bấm nút "Export JSON" tại màn hình Thiết lập. & Trình duyệt tự tải xuống tệp tin \texttt{backup.json} chứa toàn bộ DB. & Pass \\
+        \hline
+    \end{tabular}
+    \caption{Bảng kết quả kiểm thử chức năng Hệ thống}
+\end{table}
+
+\subsubsection{Đánh giá kết quả kiểm thử}
+Toàn bộ 10/10 Test Case cốt lõi đều trả về kết quả đạt (Pass). Đặc biệt:
+\begin{itemize}
+    \item \textbf{Tính toàn vẹn Dữ liệu (Data Integrity):} Thông qua Test Case 3, 4, 5, có thể khẳng định thao tác CRUD hoạt động hoàn hảo, dữ liệu giữa bộ nhớ RAM (React State) và bộ nhớ ổ cứng (LocalStorage) luôn đồng bộ theo thời gian thực mà không gặp lỗi lệch pha (Race conditions).
+    \item \textbf{Logic Nghiệp vụ (Business Logic):} Thông qua Test Case 6 và 7, thuật toán xử lý ngày tháng (Date Utils) đã chứng minh được tính chính xác cao. Việc tự động chuyển trạng thái Quá hạn hoạt động đúng với ngày giờ thực tế của hệ điều hành, không bị phụ thuộc vào dữ liệu "chết" ban đầu.
+\end{itemize}

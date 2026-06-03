@@ -4,9 +4,16 @@ import { useTasks } from '../context/TaskContext';
 import StatsOverview from '../components/stats/StatsOverview';
 import StatsCharts from '../components/stats/StatsCharts';
 
-export default function StatsPage() {
-  const { stats } = useTasks();
+export default function StatsPage({ setActivePage }) {
+  const { stats, setFilterStatus } = useTasks();
   const { completed, total, overdue } = stats;
+
+  const handleStatsClick = (status) => {
+    if (setActivePage) {
+      setFilterStatus(status);
+      setActivePage('tasks');
+    }
+  };
 
   const completionRate = total > 0 ? Math.round((completed / total) * 100) : 0;
 
@@ -57,7 +64,7 @@ export default function StatsPage() {
       </div>
 
       {/* KPI Cards */}
-      <StatsOverview />
+      <StatsOverview onCardClick={handleStatsClick} />
 
       {/* Lời khuyên năng suất */}
       <div className="section-card" style={{ 

@@ -1,0 +1,219 @@
+\section{Phân tích và thiết kế hệ thống}
+
+\subsection{Phân tích yêu cầu chức năng}
+
+\subsubsection{Quy trình nghiệp vụ}
+Trong hệ thống Personal Work Manager, quy trình nghiệp vụ được thiết kế tuân theo nguyên lý "Nắm bắt - Xử lý - Đánh giá" (Capture - Process - Review) dựa trên các phương pháp quản trị thời gian nổi tiếng như Getting Things Done (GTD). Cụ thể, quy trình cốt lõi trải qua các giai đoạn sau:
+
+\begin{enumerate}
+    \item \textbf{Giai đoạn Thiết lập (Onboarding):} Khi người dùng khởi động ứng dụng lần đầu tiên, hệ thống sẽ yêu cầu cung cấp thông tin định danh (Họ tên và Địa chỉ Email). Mục đích của giai đoạn này là khởi tạo một không gian lưu trữ (Workspace) mang tính cá nhân hóa, giúp người dùng có cảm giác sở hữu đối với ứng dụng thông qua các lời chào tùy chỉnh (Ví dụ: "Chào buổi sáng, Nguyễn Văn A").
+    \item \textbf{Giai đoạn Ghi nhận (Capture):} Bất cứ khi nào phát sinh một nhiệm vụ mới, người dùng sẽ truy cập tính năng "Thêm công việc". Tại đây, nghiệp vụ yêu cầu người dùng phải phân loại công việc một cách rõ ràng ngay từ đầu thông qua các trường dữ liệu: Tiêu đề công việc, Mức độ ưu tiên (Cao, Trung bình, Thấp), và Thời hạn (Ngày, Giờ).
+    \item \textbf{Giai đoạn Sắp xếp và Lên lịch (Organize \& Schedule):} Hệ thống tự động thu thập các nhiệm vụ đã ghi nhận, phân tích thời gian và phân bổ chúng vào Lịch biểu (Calendar) tương ứng. Đồng thời, nghiệp vụ "Lặp lại công việc" (Recurring) được tính toán: nếu một công việc được gắn cờ "Hàng ngày", thuật toán sẽ chuẩn bị sẵn kế hoạch để nhân bản công việc đó cho chu kỳ tiếp theo.
+    \item \textbf{Giai đoạn Thực thi (Engage):} Người dùng tiến hành xử lý công việc. Trong lúc làm việc, người dùng có thể kích hoạt tính năng đồng hồ đếm ngược Pomodoro (25 phút) để duy trì sự tập trung. Trong trường hợp công việc trễ hạn (so sánh với thời gian thực của hệ thống), nghiệp vụ tự động chuyển đổi trạng thái của task thành "Quá hạn" và cảnh báo bằng màu đỏ.
+    \item \textbf{Giai đoạn Đánh giá (Review):} Sau khi tích chọn "Hoàn thành" công việc, dữ liệu sẽ được đẩy về hệ thống Thống kê (Dashboard). Tại đây, thuật toán tính toán tỷ lệ hoàn thành (KPI) sẽ đưa ra các phân tích biểu đồ và các lời khuyên động (Dynamic Advices) để giúp người dùng cải thiện hiệu suất cho tuần tiếp theo.
+\end{enumerate}
+
+\subsubsection{Các chức năng của hệ thống}
+Dựa trên quy trình nghiệp vụ, hệ thống được chia thành 4 phân hệ (Module) chức năng chính:
+
+\textbf{A. Module Quản lý Tài khoản và Cấu hình:}
+\begin{itemize}
+    \item \textbf{F-A1. Đăng nhập lần đầu:} Cho phép người dùng nhập Tên và Email để thiết lập hệ thống.
+    \item \textbf{F-A2. Chuyển đổi giao diện (Theme):} Cho phép chuyển đổi nhanh giữa chế độ Sáng (Light Mode) và Tối (Dark Mode) để bảo vệ mắt.
+    \item \textbf{F-A3. Nhập/Xuất Dữ liệu (Backup \& Restore):} Tính năng cho phép tải về toàn bộ cơ sở dữ liệu dưới dạng tệp tin \texttt{.json} và tải ngược tệp \texttt{.json} lên hệ thống để khôi phục công việc.
+\end{itemize}
+
+\textbf{B. Module Quản lý Công việc (Task CRUD):}
+\begin{itemize}
+    \item \textbf{F-B1. Thêm công việc mới:} Hỗ trợ form nhập liệu validation ràng buộc tiêu đề.
+    \item \textbf{F-B2. Chỉnh sửa công việc:} Cập nhật lại các thông tin của công việc đang chờ.
+    \item \textbf{F-B3. Xóa công việc:} Loại bỏ hoàn toàn một công việc khỏi bộ nhớ.
+    \item \textbf{F-B4. Cập nhật trạng thái:} Cấu hình thao tác một chạm (One-click) để chuyển trạng thái từ "Chờ" sang "Đang thực hiện" hoặc "Hoàn thành".
+    \item \textbf{F-B5. Xử lý công việc lặp lại (Recurring Engine):} Tự động sinh task mới khi task cũ (có chu kỳ) được đánh dấu hoàn thành.
+    \item \textbf{F-B6. Tìm kiếm và Lọc:} Lọc công việc theo tổ hợp điều kiện (Trạng thái + Mức độ ưu tiên) và tìm kiếm theo từ khóa.
+\end{itemize}
+
+\textbf{C. Module Lịch biểu và Thời gian (Calendar \& Timer):}
+\begin{itemize}
+    \item \textbf{F-C1. Xem lịch hàng tháng:} Hiển thị lưới lịch 35/42 ô vuông, tự động làm nổi bật ngày hiện tại.
+    \item \textbf{F-C2. Bản đồ mật độ công việc:} Đánh dấu các chấm màu dưới ngày biểu thị số lượng và mức độ ưu tiên của công việc trong ngày đó.
+    \item \textbf{F-C3. Đồng hồ Pomodoro:} Tiện ích đếm ngược 25 phút làm việc, 5 phút nghỉ ngơi, kèm hiệu ứng âm thanh báo hiệu.
+\end{itemize}
+
+\textbf{D. Module Thống kê (Analytics):}
+\begin{itemize}
+    \item \textbf{F-D1. Tổng hợp thẻ chỉ số (KPI Cards):} Đếm tổng số công việc, số đã hoàn thành, số đang làm và số quá hạn.
+    \item \textbf{F-D2. Biểu đồ tiến độ (Charts):} Vẽ biểu đồ cột và biểu đồ tròn hiển thị phân bổ công việc.
+    \item \textbf{F-D3. Trợ lý gợi ý (Smart Advisor):} Cung cấp các câu khích lệ hoặc cảnh báo dựa trên tỷ lệ hoàn thành công việc.
+\end{itemize}
+
+\subsubsection{Biểu đồ use case}
+Biểu đồ Use Case là bước sơ đồ hóa các chức năng tương tác giữa người dùng (Actor) và Hệ thống (System Boundary). 
+
+\textit{(Sinh viên tiến hành thiết kế biểu đồ Use Case tổng quát trên draw.io hoặc StarUML và chèn hình ảnh vào vị trí này. Biểu đồ cần thể hiện một Actor "User" nối với các luồng chức năng như Quản lý Task, Quản lý Lịch, Thống kê, đi kèm các quan hệ \texttt{<<include>>} và \texttt{<<extend>>} hợp lý).}
+
+\subsubsection{Đặc tả các use case}
+
+Dưới đây là tài liệu đặc tả chi tiết (Use Case Specifications) cho 3 chức năng cốt lõi nhất của phần mềm nhằm làm rõ luồng sự kiện (Flow of events) ở cấp độ hệ thống.
+
+\textbf{1. Đặc tả Use Case: Quản lý đăng nhập lần đầu (Onboarding)}
+\begin{itemize}
+    \item \textbf{ID:} UC-01
+    \item \textbf{Tên Use Case:} Đăng nhập và thiết lập cá nhân hóa.
+    \item \textbf{Tác nhân (Actor):} Người dùng mới (New User).
+    \item \textbf{Mục đích:} Thu thập thông tin tên và email để hệ thống có thể nhận diện và chào hỏi người dùng trong các phiên làm việc tiếp theo.
+    \item \textbf{Điều kiện tiên quyết:} Trình duyệt chưa từng lưu trữ dữ liệu \texttt{user} trong LocalStorage.
+    \item \textbf{Luồng sự kiện chính (Main Flow):}
+    \begin{enumerate}
+        \item Hệ thống hiển thị trang màn hình Đăng nhập (LoginPage).
+        \item Người dùng nhập Tên (Username) và Địa chỉ Email vào các ô văn bản tương ứng.
+        \item Người dùng nhấn nút "Bắt đầu ngay".
+        \item Hệ thống kiểm tra dữ liệu đầu vào.
+        \item Hệ thống đóng gói dữ liệu thành đối tượng JSON và lưu vào LocalStorage với khóa \texttt{task-manager-user}.
+        \item Hệ thống chuyển hướng (Redirect) người dùng tới giao diện Trang chủ (Dashboard).
+    \end{enumerate}
+    \item \textbf{Luồng sự kiện rẽ nhánh (Alternate Flow):} 
+    \begin{itemize}
+        \item Tại bước 4, nếu người dùng bỏ trống Tên hoặc Email, hệ thống từ chối lưu dữ liệu và hiển thị thông báo lỗi màu đỏ: "Vui lòng điền đầy đủ tên và email!".
+        \item Nếu Email không chứa ký tự '@', hệ thống báo lỗi định dạng không hợp lệ.
+    \end{itemize}
+    \item \textbf{Kết quả (Post-condition):} Hệ thống ghi nhận tài khoản, hiển thị tên người dùng trên thanh tiêu đề và không yêu cầu đăng nhập lại trong tương lai.
+\end{itemize}
+
+\textbf{2. Đặc tả Use Case: Thêm công việc mới}
+\begin{itemize}
+    \item \textbf{ID:} UC-02
+    \item \textbf{Tên Use Case:} Thêm mới công việc vào hệ thống (Create Task).
+    \item \textbf{Tác nhân (Actor):} Người dùng hệ thống (User).
+    \item \textbf{Mục đích:} Cho phép người dùng ghi nhận một công việc mới vào danh sách.
+    \item \textbf{Điều kiện tiên quyết:} Người dùng đã vượt qua bước đăng nhập và đang ở màn hình Dashboard, Tasks hoặc Calendar.
+    \item \textbf{Luồng sự kiện chính (Main Flow):}
+    \begin{enumerate}
+        \item Người dùng nhấn nút "Thêm công việc" (biểu tượng dấu cộng).
+        \item Hệ thống hiển thị Modal cửa sổ nổi chứa Form thêm công việc.
+        \item Người dùng nhập Tiêu đề, chọn Mức độ ưu tiên (Cao/Trung bình/Thấp), chọn Ngày thực hiện, Giờ thực hiện và tùy chọn Tần suất lặp lại.
+        \item Người dùng nhấn nút "Lưu công việc".
+        \item Hệ thống thu thập thông tin, tự động gán một chuỗi định danh duy nhất (UUID/Timestamp) làm ID cho công việc.
+        \item Hệ thống so sánh ngày thực hiện với ngày hiện tại để quyết định trạng thái khởi tạo là "Chờ" (Pending) hay "Quá hạn" (Overdue).
+        \item Cập nhật mảng dữ liệu nội bộ và ghi đè xuống LocalStorage.
+        \item Đóng Modal và hiển thị công việc mới trên giao diện danh sách.
+    \end{enumerate}
+    \item \textbf{Luồng sự kiện rẽ nhánh (Alternate Flow):} 
+    \begin{itemize}
+        \item Nếu người dùng nhấn ra ngoài vùng tối (Overlay) hoặc nhấn nút "Hủy", Modal sẽ đóng và mọi thông tin chưa lưu sẽ bị xóa bỏ.
+        \item Nếu tiêu đề bị bỏ trống, hệ thống highlight ô tiêu đề yêu cầu nhập liệu.
+    \end{itemize}
+\end{itemize}
+
+\textbf{3. Đặc tả Use Case: Xử lý công việc định kỳ (Recurring Workflow)}
+\begin{itemize}
+    \item \textbf{ID:} UC-03
+    \item \textbf{Tên Use Case:} Đánh dấu hoàn thành và sinh công việc lặp lại.
+    \item \textbf{Tác nhân (Actor):} Người dùng / Hệ thống (Hỗ trợ ngầm).
+    \item \textbf{Mục đích:} Tự động hóa việc duy trì các thói quen hàng ngày bằng cách tự tạo công việc mới khi công việc hiện tại đã xong.
+    \item \textbf{Điều kiện tiên quyết:} Trong danh sách tồn tại ít nhất 1 công việc có thuộc tính \texttt{repeat} khác "Không lặp".
+    \item \textbf{Luồng sự kiện chính (Main Flow):}
+    \begin{enumerate}
+        \item Người dùng nhấn vào biểu tượng Checkbox hình tròn của công việc lặp lại.
+        \item Hệ thống cập nhật trạng thái của công việc đó từ "Chờ" / "Đang thực hiện" thành "Hoàn thành". Giao diện gạch ngang chữ công việc.
+        \item Hệ thống kiểm tra trường \texttt{repeat} của công việc. Phát hiện công việc có thuộc tính lặp.
+        \item Hệ thống kích hoạt thuật toán \texttt{getNextOccurrenceDate()} trong \texttt{dateUtils.js} để cộng thêm 1 ngày, 7 ngày hoặc 1 tháng tương ứng vào biến \texttt{date}.
+        \item Hệ thống tự động khởi tạo một đối tượng Task hoàn toàn mới với \texttt{date} mới tính toán, giữ nguyên tiêu đề và độ ưu tiên.
+        \item Hệ thống chèn Task mới lên đầu danh sách tổng và lưu vào LocalStorage.
+    \end{enumerate}
+\end{itemize}
+
+\subsection{Yêu cầu phi chức năng}
+
+\subsubsection{Yêu cầu về giao diện người dùng (User Interface - UI/UX)}
+Giao diện người dùng là một trong những yếu tố được chú trọng nhất trong ứng dụng Personal Work Manager. Yêu cầu giao diện phải đáp ứng các tiêu chuẩn:
+\begin{itemize}
+    \item \textbf{Tính thẩm mỹ (Aesthetics):} Áp dụng xu hướng thiết kế Glassmorphism (hiệu ứng kính mờ), sử dụng các dải màu Gradient hài hòa (Soft colors) để giảm thiểu sự căng thẳng cho mắt khi phải làm việc liên tục với danh sách dài.
+    \item \textbf{Tính nhất quán (Consistency):} Cấu trúc Layout gồm Sidebar (thanh điều hướng trái) và Main Content (nội dung chính bên phải) phải giữ cố định khi chuyển trang. Các nút bấm (Buttons) mang cùng tính chất phải có màu sắc và hành vi tương tự nhau (Ví dụ: Nút hành động chính luôn là màu Xanh dương đậm).
+    \item \textbf{Tính phản hồi (Responsiveness):} Hệ thống CSS sử dụng Grid và Flexbox kết hợp Media Queries để đảm bảo giao diện không bị vỡ bố cục khi thay đổi kích thước màn hình, từ màn hình Desktop siêu rộng (1080p, 4K) cho đến màn hình nhỏ của điện thoại thông minh (Smartphones).
+    \item \textbf{Phản hồi vi mô (Micro-interactions):} Mọi tương tác click chuột, hover (di chuột) lên các thẻ thống kê hay dòng công việc đều phải có hiệu ứng \texttt{transition} làm phóng to, đổi màu hoặc bóng đổ mượt mà để tăng cảm giác vật lý cho phần mềm.
+\end{itemize}
+
+\subsubsection{Yêu cầu về tính bảo mật (Security \& Privacy)}
+Do tính chất là phần mềm quản lý thông tin cá nhân và lịch trình riêng tư, bảo mật dữ liệu là ưu tiên hàng đầu. Tuy nhiên, thay vì sử dụng các cơ chế mã hóa phức tạp trên Server, hệ thống giải quyết bài toán bảo mật thông qua \textbf{Kiến trúc cách ly (Isolation Architecture)}:
+\begin{itemize}
+    \item Toàn bộ dữ liệu của người dùng không bao giờ rời khỏi thiết bị cá nhân của họ.
+    \item Ứng dụng không thực hiện bất kỳ lệnh gọi API (Fetch/Axios) nào đến máy chủ bên thứ ba để truyền tải dữ liệu công việc.
+    \item Điều này loại bỏ 100\% nguy cơ bị tin tặc tấn công máy chủ trung tâm để đánh cắp cơ sở dữ liệu. Dữ liệu chỉ có thể bị đánh cắp nếu kẻ gian truy cập vật lý trực tiếp vào máy tính của người dùng và mở công cụ DevTools của trình duyệt.
+\end{itemize}
+
+\subsubsection{Các ràng buộc (Constraints)}
+\begin{itemize}
+    \item \textbf{Công nghệ phía Máy khách (Client Technology Constraints):} Trình duyệt của người dùng bắt buộc phải hỗ trợ chuẩn ES6 JavaScript và HTML5 Web Storage API. Các trình duyệt lỗi thời như Internet Explorer 11 trở xuống sẽ không thể chạy được phần mềm.
+    \item \textbf{Ràng buộc dung lượng (Storage Limit):} LocalStorage trên các trình duyệt tiêu chuẩn (Chrome, Firefox, Edge) giới hạn bộ nhớ phân bổ cho mỗi tên miền (Domain) là 5MB. Vì cấu trúc mỗi công việc (Task) dưới dạng chuỗi JSON rất nhẹ (khoảng 200 - 300 Bytes), người dùng có thể lưu trữ tối đa lên tới 15.000 - 20.000 công việc. Vượt quá ngưỡng này, hệ thống có thể ném ra ngoại lệ \texttt{QuotaExceededError}. Người dùng được khuyến cáo sử dụng tính năng Export để lưu trữ dữ liệu cũ ra ổ cứng máy tính trước khi giới hạn này bị phá vỡ.
+\end{itemize}
+
+\subsubsection{Các yêu cầu phi chức năng khác (nếu có)}
+\begin{itemize}
+    \item \textbf{Hiệu năng (Performance \& Zero-Latency):} Khác với các ứng dụng Web truyền thống phải đợi Server xử lý và truy vấn SQL (tốn từ 100ms - 500ms), mọi thao tác thêm, xóa, sửa trong ứng dụng này phải có phản hồi ngay tức thì (0ms). Trải nghiệm người dùng phải mượt mà tương đương như đang sử dụng một phần mềm Desktop nguyên bản (Native Desktop App).
+    \item \textbf{Tính mở rộng (Scalability - Codebase):} Mã nguồn (Source code) phải tuân thủ chuẩn Clean Code, viết rõ ràng, phân tách Component hợp lý để các thế hệ lập trình viên kế cận dễ dàng bổ sung tính năng mới (Ví dụ: Thêm tính năng làm việc nhóm qua Firebase trong tương lai) mà không phải đập bỏ xây lại từ đầu.
+\end{itemize}
+
+\subsection{Kiến trúc tổng thể hệ thống}
+Dự án được xây dựng dựa trên nguyên lý của kiến trúc \textbf{Client-side Component-Based Architecture} (Kiến trúc Dựa trên Thành phần phía Máy khách), một xu hướng phát triển phần mềm vô cùng phổ biến do Facebook đề xuất thông qua thư viện React JS. 
+
+Để dễ dàng ánh xạ với các kiến thức Kỹ thuật phần mềm đại cương, chúng ta có thể coi kiến trúc này là một dạng \textbf{Mô hình MVC (Model - View - Controller)} rút gọn và hoạt động hoàn toàn tại phía Client.
+
+\begin{itemize}
+    \item \textbf{Tầng Data / Model (Lớp Dữ liệu và Trạng thái):} 
+    Trong kiến trúc này, "Single Source of Truth" (Nguồn dữ liệu chân lý duy nhất) được đặt tại tập tin \texttt{TaskContext.jsx}. Đây là tầng cao nhất trong cây React, đóng vai trò như một kho chứa (Store) bao bọc toàn bộ ứng dụng. 
+    Lớp này chịu trách nhiệm định nghĩa cấu trúc của Đối tượng Người dùng (\texttt{user}), Mảng công việc (\texttt{tasks}) và duy trì cầu nối liên tục (Observer) với bộ nhớ \texttt{LocalStorage} của trình duyệt. 
+    
+    \item \textbf{Tầng View (Lớp Hiển thị - React Components):} 
+    Được cấu trúc từ hàng chục thành phần nhỏ (UI Components) độc lập và có thể tái sử dụng (Reusable). Mỗi màn hình như Dashboard, Calendar, Tasks không phải là một trang HTML riêng rẽ mà được "lắp ghép" từ các mảnh ghép giao diện như \texttt{Sidebar.jsx}, \texttt{Header.jsx}, \texttt{StatsOverview.jsx}, \texttt{TaskItem.jsx}.
+    Lớp View tuân thủ nguyên lý "Dumb Component" (Component ngốc): Chúng không tự ý thay đổi dữ liệu mà chỉ làm nhiệm vụ "Lắng nghe" dữ liệu từ Context và "Hiển thị" (Render) ra màn hình thành mã HTML/CSS.
+    
+    \item \textbf{Tầng Controller / Action (Lớp Điều khiển và Xử lý Logic):} 
+    Bao gồm các hàm xử lý hành động (Action handlers) được khai báo bên trong \texttt{TaskContext} như \texttt{addTask}, \texttt{deleteTask}, \texttt{toggleTaskStatus}, \texttt{loginUser}. Khi người dùng bấm nút trên lớp View, lớp View không trực tiếp thay đổi cơ sở dữ liệu mà gọi "phái bộ" thông qua các hàm Controller này. Các thuật toán phức tạp như tính toán thời gian, điều phối chuyển đổi ngày giờ được đẩy ra các file tiện ích \texttt{utils/dateUtils.js} để cách ly logic nghiệp vụ khỏi giao diện.
+\end{itemize}
+
+\textbf{Lợi ích của kiến trúc này:}
+Kiến trúc này giúp tối đa hóa khả năng bảo trì (Maintainability) và kiểm thử (Testability). Nếu trong tương lai cần thay đổi logic đánh giá thời gian quá hạn, lập trình viên chỉ cần sửa trong thư mục \texttt{utils} hoặc \texttt{context} mà không cần đụng đến mã nguồn của lớp giao diện người dùng.
+
+\subsection{Biểu đồ lớp (Class Diagram)}
+Mặc dù JavaScript và React sử dụng tư duy Lập trình hàm (Functional Programming) khá nhiều, nhưng để phục vụ quá trình Phân tích thiết kế hệ thống theo chuẩn OOP (Lập trình hướng đối tượng), hệ thống có thể được trừu tượng hóa thông qua Biểu đồ Lớp.
+
+\textit{(Sinh viên tiến hành vẽ biểu đồ Class Diagram trên công cụ UML. Các Lớp cơ bản bao gồm: \texttt{Task} (chứa id, title, priority, status...), lớp \texttt{User} (username, email), lớp quản lý \texttt{TaskManager} (chứa mảng danh sách các Task và các phương thức CRUD), lớp \texttt{PomodoroTimer} (quản lý thời gian), lớp \texttt{LocalStorageAdapter} (hỗ trợ đọc ghi dữ liệu). Hệ thống các quan hệ Composition và Dependency cần được vạch rõ.)}
+
+\subsection{Thiết kế cơ sở dữ liệu (Local Storage Schema)}
+Vì hệ thống không sử dụng Hệ quản trị Cơ sở dữ liệu quan hệ (RDBMS) như MySQL hay SQL Server, mà dùng Cơ sở dữ liệu phi quan hệ (NoSQL) dựa trên Document/Key-Value của trình duyệt, phần "Thiết kế cơ sở dữ liệu" thực chất là quá trình thiết kế cấu trúc mạng dữ liệu JSON (JSON Schema).
+
+Hệ thống lưu trữ 3 khóa (Keys) chính vào bộ nhớ trình duyệt:
+
+\textbf{1. Bảng lưu thông tin cấu hình (Settings Table)}
+\begin{itemize}
+    \item \texttt{Key}: \texttt{task-manager-theme}
+    \item \texttt{Value}: Chuỗi văn bản, chứa giá trị \texttt{"light"} hoặc \texttt{"dark"}.
+\end{itemize}
+
+\textbf{2. Bảng lưu thông tin định danh người dùng (Users Table)}
+\begin{itemize}
+    \item \texttt{Key}: \texttt{task-manager-user}
+    \item \texttt{Value}: Cấu trúc đối tượng JSON chứa thông tin người dùng đăng nhập lần đầu.
+    \item \textit{Ví dụ dữ liệu:} \texttt{\{"username": "Nguyễn Văn A", "email": "nva@gmail.com"\}}
+\end{itemize}
+
+\textbf{3. Bảng lưu danh sách công việc cốt lõi (Tasks Table)}
+\begin{itemize}
+    \item \texttt{Key}: \texttt{task-manager-tasks-v2} (Sử dụng hậu tố v2 để quản lý phiên bản dữ liệu).
+    \item \texttt{Value}: Một mảng (Array) chứa hàng loạt các Đối tượng Công việc (Task Objects). Mỗi Object là một bản ghi (Record) với các trường (Fields) tương tự như các cột trong bảng CSDL quan hệ.
+    \item \textit{Cấu trúc Schema của một Task Object:}
+    \begin{itemize}
+        \item \texttt{id} (String): Khóa chính (Primary Key), tự sinh bằng UUID hoặc Timestamp.
+        \item \texttt{title} (String): Tên của công việc.
+        \item \texttt{description} (String): Ghi chú chi tiết (Nullable).
+        \item \texttt{date} (String - YYYY-MM-DD): Ngày thực hiện mục tiêu.
+        \item \texttt{time} (String - HH:MM): Giờ thực hiện mục tiêu.
+        \item \texttt{priority} (String): Mức độ ưu tiên, thuộc tập hợp \{"Cao", "Trung bình", "Thấp"\}.
+        \item \texttt{status} (String): Trạng thái tiến độ, thuộc tập \{"Chờ", "Đang thực hiện", "Hoàn thành", "Quá hạn"\}.
+        \item \texttt{repeat} (String): Tần suất lặp, thuộc tập \{"Không lặp", "Hàng ngày", "Hàng tuần", "Hàng tháng"\}.
+        \item \texttt{createdAt} (String - ISO Date): Thời điểm tạo bản ghi, phục vụ mục đích kiểm toán (Audit).
+    \end{itemize}
+\end{itemize}
+
+Việc thiết kế cấu trúc JSON phẳng (Flat structure) thay vì lồng ghép nhiều cấp giúp thuật toán \texttt{Array.map()} và \texttt{Array.filter()} của React thực thi các thao tác tìm kiếm và render giao diện một cách tối ưu với độ phức tạp $O(n)$.

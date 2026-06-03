@@ -1,0 +1,62 @@
+\section*{Kết luận}
+\addcontentsline{toc}{section}{Kết luận}
+
+Trải qua nhiều tuần nghiên cứu, thiết kế và lập trình không ngừng nghỉ, dự án \textbf{Personal Work Manager} đã chính thức được hoàn thiện và đóng gói thành công. Từ những ý tưởng sơ khai trên giấy về một công cụ giúp tối ưu hóa cuộc sống, nhóm đã từng bước hiện thực hóa nó thành một ứng dụng Web hoàn chỉnh, trực quan và sở hữu hiệu năng xuất sắc.
+
+Trong khuôn khổ của môn học Kỹ thuật phần mềm, dự án không chỉ mang lại một sản phẩm có giá trị sử dụng thực tiễn, mà còn là một bài thực hành vô giá giúp sinh viên hiểu rõ tầm quan trọng của việc tuân thủ quy trình Vòng đời phát triển phần mềm (SDLC). Thay vì lao ngay vào viết code một cách mù quáng, việc dành thời gian cho phân tích Use Case, thiết kế kiến trúc Component, xây dựng lược đồ JSON và viết Test Case đã giúp ngăn chặn rủi ro kiến trúc và đảm bảo tiến độ dự án đi đúng hướng.
+
+\textbf{1. Những điểm sáng của hệ thống (Ưu điểm)}
+\begin{itemize}
+    \item \textbf{Kiến trúc linh hoạt:} Sự kết hợp giữa React 19 và Vite tạo ra một nền tảng vững chắc. Nhờ việc sử dụng Context API (Singleton Pattern) và Custom Hooks, hệ thống tránh được tình trạng mã nguồn bị "spaghetti" (chồng chéo), giúp dễ dàng bảo trì và bổ sung tính năng mới.
+    \item \textbf{Hiệu năng tuyệt đối (Zero-latency):} Khác biệt lớn nhất của hệ thống là không sử dụng cơ sở dữ liệu trên mây mà tương tác trực tiếp với LocalStorage của trình duyệt. Mọi thao tác Thêm, Sửa, Xóa đều cho phản hồi ngay lập tức (0 mili-giây), mang lại trải nghiệm tiệm cận với một ứng dụng Native trên máy tính cài đặt sẵn.
+    \item \textbf{Thiết kế Thẩm mỹ (UI/UX):} Không lạm dụng các thư viện giao diện công nghiệp khô khan, giao diện được tùy biến thủ công với CSS thuần (Vanilla CSS) áp dụng hiệu ứng Glassmorphism. Màu sắc được tinh chỉnh để giảm mỏi mắt, các khối thông tin được phân cấp rõ ràng theo mức độ ưu tiên.
+\end{itemize}
+
+\textbf{2. Tồn tại và Hạn chế (Nhược điểm)}
+\begin{itemize}
+    \item Mặc dù LocalStorage mang lại hiệu năng siêu việt, nhưng nó cũng là con dao hai lưỡi. Nhược điểm lớn nhất là tính "cục bộ" (Local). Người dùng không thể vừa thêm một công việc trên máy tính ở cơ quan, rồi về nhà dùng điện thoại cá nhân để check-off công việc đó (Trừ khi họ tự mình export và import file thủ công qua Email hoặc USB).
+    \item Hệ thống hiện tại chưa hỗ trợ tính năng làm việc nhóm (Collaborative mode) hay ủy quyền công việc (Delegate) cho người khác.
+\end{itemize}
+
+\textbf{3. Hướng phát triển trong tương lai (Future Work)}
+Để biến Personal Work Manager từ một dự án bài tập lớn thành một sản phẩm thương mại hóa (SaaS - Software as a Service), quy trình SDLC đề xuất các bước tiến hóa (Evolution) sau cho các phiên bản tiếp theo:
+\begin{itemize}
+    \item \textbf{Xây dựng tầng Backend (API Server):} Sử dụng Node.js (Express/NestJS) kết hợp cùng cơ sở dữ liệu MongoDB hoặc PostgreSQL. Khi đó, LocalStorage sẽ chỉ còn đóng vai trò là bộ đệm (Cache), mọi dữ liệu chính thức sẽ được đồng bộ lên Cloud để hỗ trợ đăng nhập đa thiết bị (Multi-device Sync).
+    \item \textbf{Xác thực OAuth 2.0:} Cho phép người dùng đăng nhập nhanh bằng tài khoản Google, Facebook, Apple thay vì chỉ nhập tên thủ công như hiện tại.
+    \item \textbf{Tích hợp AI Trợ lý:} Bổ sung thêm công nghệ Trí tuệ nhân tạo (như ChatGPT API) để hệ thống tự động đọc tiêu đề công việc và gợi ý thời gian hoàn thành (Estimation), hoặc tự động chia nhỏ một mục tiêu lớn (Epic) thành các công việc nhỏ (Sub-tasks).
+\end{itemize}
+
+\section*{Phân công nhiệm vụ}
+\addcontentsline{toc}{section}{Phân công nhiệm vụ}
+
+Sự thành công của dự án là kết quả của quá trình làm việc nhóm hiệu quả, áp dụng phương pháp luận Agile. Bảng dưới đây tóm tắt khối lượng công việc đã được phân bổ và thực thi bởi các thành viên:
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{|c|p{3.5cm}|p{6cm}|c|c|}
+        \hline
+        \textbf{STT} & \textbf{Họ và Tên} & \textbf{Chi tiết Nhiệm vụ đảm nhiệm} & \textbf{Tỉ lệ đóng góp} & \textbf{Đánh giá} \\
+        \hline
+        1 & Sinh viên A \newline (Trưởng nhóm) & 
+        - Khảo sát yêu cầu, vẽ biểu đồ Use Case/Class. \newline
+        - Setup cấu trúc thư mục React và Vite ban đầu. \newline
+        - Lập trình Module xác thực (Onboarding). \newline
+        - Lập trình Module Thống kê (KPI \& Charts). \newline
+        - Tổng hợp viết tài liệu Báo cáo LaTeX. & 35\% & 100\% \\
+        \hline
+        2 & Sinh viên B & 
+        - Thiết kế toàn bộ giao diện CSS (UI/UX). \newline
+        - Lập trình Module Quản lý Task (CRUD). \newline
+        - Xây dựng thuật toán Kéo Thả (Drag \& Drop). \newline
+        - Tích hợp tính năng Xuất/Nhập dữ liệu JSON. & 35\% & 100\% \\
+        \hline
+        3 & Sinh viên C & 
+        - Nghiên cứu và code tiện ích Pomodoro Timer. \newline
+        - Xây dựng thuật toán tính toán Lịch (Calendar). \newline
+        - Phát triển thuật toán sinh công việc định kỳ. \newline
+        - Viết kịch bản kiểm thử (Test Cases) \& Test lỗi. & 30\% & 100\% \\
+        \hline
+    \end{tabular}
+    \caption{Bảng phân công nhiệm vụ và khối lượng công việc của nhóm}
+\end{table}
