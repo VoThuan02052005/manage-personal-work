@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Bell, Sun, Moon } from 'lucide-react';
+import { Search, Bell, Sun, Moon, LogOut } from 'lucide-react';
 import { useTasks } from '../../context/TaskContext';
 
 export default function Header() {
-  const { searchQuery, setSearchQuery, stats, user } = useTasks();
+  const { searchQuery, setSearchQuery, stats, user, logoutUser } = useTasks();
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('task-manager-theme') || 'light';
   });
@@ -52,6 +52,16 @@ export default function Header() {
             <span className="profile-status">Online</span>
           </div>
         </div>
+
+        {/* Nút đăng xuất */}
+        <button
+          className="icon-btn"
+          onClick={logoutUser}
+          title="Đăng xuất"
+          style={{ marginLeft: '4px' }}
+        >
+          <LogOut size={18} />
+        </button>
       </div>
     </header>
   );

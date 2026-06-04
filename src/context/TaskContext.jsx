@@ -6,6 +6,9 @@ const TaskContext = createContext();
 
 export const useTasks = () => useContext(TaskContext);
 
+// Tài khoản Admin cố định (hardcoded)
+const ADMIN_CREDENTIALS = { username: 'admin', password: 'admin123', role: 'admin' };
+
 export const TaskProvider = ({ children }) => {
   // Sử dụng thời gian thực tế của hệ thống
   const systemToday = new Date();
@@ -23,7 +26,6 @@ export const TaskProvider = ({ children }) => {
         console.error("Lỗi parse tasks từ localStorage", e);
       }
     }
-    // Trả về mảng rỗng thay vì dữ liệu mẫu
     return [];
   });
 
@@ -32,18 +34,85 @@ export const TaskProvider = ({ children }) => {
     return savedUser ? JSON.parse(savedUser) : null;
   });
 
-  const loginUser = (username, email) => {
-    const userData = { username, email };
+  // Danh sách tất cả user đã đăng ký (dành cho Admin)
+  const [registeredUsers, setRegisteredUsers] = useState(() => {
+    const saved = localStorage.getItem('task-manager-registered-users');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  // Xác thực đăng nhập – trả về { success, role, message }
+  const loginUser = (username, email, password) => {
+    // Kiểm tra Admin
+    if (
+      username.trim() === ADMIN_CREDENTIALS.username &&
+      password === ADMIN_CREDENTIALS.password
+    ) {
+      const adminData = { username: 'Admin', email: 'admin@system.local', role: 'admin' };
+      setUser(adminData);
+      localStorage.setItem('task-manager-user', JSON.stringify(adminData));
+      return { success: true, role: 'admin' };
+    }
+
+    // Validate User thông thường
+    if (!username.trim() || !email.trim() || !password.trim()) {
+      return { success: false, message: 'Vui lòng điền đầy đủ thông tin!' };
+    }
+    if (!email.includes('@')) {
+      return { success: false, message: 'Email không hợp lệ!' };
+    }
+    if (password.length < 6) {
+      return { success: false, message: 'Mật khẩu phải có ít nhất 6 ký tự!' };
+    }
+
+    // Kiểm tra email đã tồn tại chưa → nếu có thì kiểm tra mật khẩu
+    const existing = registeredUsers.find(u => u.email === email.trim());
+    if (existing) {
+      if (existing.password !== password) {
+        return { success: false, message: 'Mật khẩu không đúng!' };
+      }
+      // Đăng nhập lại thành công
+      const userData = { username: existing.username, email: existing.email, role: 'user' };
+      setUser(userData);
+      localStorage.setItem('task-manager-user', JSON.stringify(userData));
+      return { success: true, role: 'user' };
+    }
+
+    // Đăng ký mới
+    const newUser = {
+      id: `user-${Date.now()}`,
+      username: username.trim(),
+      email: email.trim(),
+      password,
+      role: 'user',
+      registeredAt: new Date().toISOString(),
+    };
+    const updatedUsers = [...registeredUsers, newUser];
+    setRegisteredUsers(updatedUsers);
+    localStorage.setItem('task-manager-registered-users', JSON.stringify(updatedUsers));
+
+    const userData = { username: newUser.username, email: newUser.email, role: 'user' };
     setUser(userData);
     localStorage.setItem('task-manager-user', JSON.stringify(userData));
+    return { success: true, role: 'user' };
+  };
+
+  const logoutUser = () => {
+    setUser(null);
+    localStorage.removeItem('task-manager-user');
+  };
+
+  // Xóa user khỏi danh sách (Admin)
+  const deleteRegisteredUser = (userId) => {
+    const updated = registeredUsers.filter(u => u.id !== userId);
+    setRegisteredUsers(updated);
+    localStorage.setItem('task-manager-registered-users', JSON.stringify(updated));
   };
 
   const [selectedDate, setSelectedDate] = useState(CURRENT_DATE);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterPriority, setFilterPriority] = useState("Tất cả"); // Tất cả, Cao, Trung bình, Thấp
-  const [filterStatus, setFilterStatus] = useState("Tất cả"); // Tất cả, Chờ, Đang thực hiện, Hoàn thành, Quá hạn
+  const [filterPriority, setFilterPriority] = useState("Tất cả");
+  const [filterStatus, setFilterStatus] = useState("Tất cả");
 
-  // Lưu trữ các Task đã được thông báo nhắc nhở để tránh gửi lặp lại
   const [notifiedTasks, setNotifiedTasks] = useState(() => {
     const saved = localStorage.getItem('task-manager-notified-ids');
     return saved ? JSON.parse(saved) : [];
@@ -53,12 +122,10 @@ export const TaskProvider = ({ children }) => {
   useEffect(() => {
     let changed = false;
     const updatedTasks = tasks.map(task => {
-      // Nếu task chưa hoàn thành, ngày làm việc trước hôm nay, và chưa đánh dấu Quá hạn
       if (task.status !== "Hoàn thành" && isBeforeToday(task.date, CURRENT_DATE) && task.status !== "Quá hạn") {
         changed = true;
         return { ...task, status: "Quá hạn" };
       }
-      // Ngược lại, nếu task từng quá hạn nhưng ngày được sửa lại thành tương lai/hôm nay
       if (task.status === "Quá hạn" && !isBeforeToday(task.date, CURRENT_DATE)) {
         changed = true;
         return { ...task, status: "Chờ" };
@@ -80,27 +147,22 @@ export const TaskProvider = ({ children }) => {
       const isNotificationsEnabled = localStorage.getItem('task-manager-notifications') === 'true';
       if (!isNotificationsEnabled || Notification.permission !== "granted") return;
 
-      // Lấy giờ hiện tại (Giả lập giờ theo mốc 2026-05-18 của hệ thống để khớp dữ liệu)
       const now = new Date();
       const currentHours = String(now.getHours()).padStart(2, '0');
       const currentMinutes = String(now.getMinutes()).padStart(2, '0');
       const currentTimeStr = `${currentHours}:${currentMinutes}`;
 
-      // Quét các công việc hôm nay chưa xong và chưa được thông báo
       tasks.forEach(task => {
         if (
-          isSameDay(task.date, CURRENT_DATE) && 
-          task.status !== "Hoàn thành" && 
+          isSameDay(task.date, CURRENT_DATE) &&
+          task.status !== "Hoàn thành" &&
           !notifiedTasks.includes(task.id)
         ) {
-          // Nếu thời gian khớp chính xác hoặc trước 5 phút
           if (task.time === currentTimeStr) {
             new Notification(`🔔 Nhắc nhở công việc: ${task.title}`, {
               body: `Đã đến giờ thực hiện lúc ${task.time}! Mức độ ưu tiên: ${task.priority}`,
               icon: '/favicon.ico'
             });
-
-            // Cập nhật mảng đã thông báo
             setNotifiedTasks(prev => {
               const updated = [...prev, task.id];
               localStorage.setItem('task-manager-notified-ids', JSON.stringify(updated));
@@ -109,7 +171,7 @@ export const TaskProvider = ({ children }) => {
           }
         }
       });
-    }, 15000); // Quét mỗi 15 giây
+    }, 15000);
 
     return () => clearInterval(checkInterval);
   }, [tasks, notifiedTasks]);
@@ -151,12 +213,10 @@ export const TaskProvider = ({ children }) => {
       const updatedList = prev.map(task => {
         if (task.id === taskId) {
           const wasCompleted = task.status === "Hoàn thành";
-          const newStatus = wasCompleted ? 
-            (isBeforeToday(task.date, CURRENT_DATE) ? "Quá hạn" : "Đang thực hiện") : 
+          const newStatus = wasCompleted ?
+            (isBeforeToday(task.date, CURRENT_DATE) ? "Quá hạn" : "Đang thực hiện") :
             "Hoàn thành";
 
-          // --- LOGIC CÔNG VIỆC LẶP LẠI (RECURRING TASK) ---
-          // Nếu chuyển từ CHƯA XONG sang HOÀN THÀNH và có chế độ lặp lại
           if (!wasCompleted && task.repeat && task.repeat !== "Không lặp") {
             const nextDate = getNextOccurrenceDate(task.date, task.repeat);
             nextTaskToAdd = {
@@ -184,7 +244,6 @@ export const TaskProvider = ({ children }) => {
     });
   };
 
-  // --- KÉO THẢ SẮP XẾP LẠI CÔNG VIỆC (DRAG & DROP) ---
   const dragAndDropTasks = (draggedId, targetId) => {
     setTasks(prev => {
       const list = [...prev];
@@ -192,16 +251,13 @@ export const TaskProvider = ({ children }) => {
       const targetIdx = list.findIndex(t => t.id === targetId);
 
       if (draggedIdx !== -1 && targetIdx !== -1) {
-        // Cắt phần tử kéo ra khỏi mảng
         const [draggedItem] = list.splice(draggedIdx, 1);
-        // Chèn vào vị trí đích
         list.splice(targetIdx, 0, draggedItem);
       }
       return list;
     });
   };
 
-  // --- NHẬP / XUẤT DỮ LIỆU JSON (IMPORT & EXPORT) ---
   const exportTasksData = () => {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(tasks, null, 2));
     const downloadAnchor = document.createElement('a');
@@ -216,7 +272,6 @@ export const TaskProvider = ({ children }) => {
     try {
       const parsed = JSON.parse(jsonData);
       if (Array.isArray(parsed)) {
-        // Chuẩn hóa định dạng nếu thiếu
         const sanitized = parsed.map(t => ({
           id: t.id || `task-${Date.now()}-${Math.random()}`,
           title: t.title || "Không có tiêu đề",
@@ -240,21 +295,18 @@ export const TaskProvider = ({ children }) => {
     }
   };
 
-  // Thống kê toàn cục (Dashboard KPIs)
   const stats = React.useMemo(() => {
     const total = tasks.length;
     const completed = tasks.filter(t => t.status === "Hoàn thành").length;
     const active = tasks.filter(t => t.status === "Đang thực hiện" || t.status === "Chờ").length;
     const overdue = tasks.filter(t => t.status === "Quá hạn").length;
-    
-    // Thống kê theo mức độ ưu tiên
+
     const priorityCounts = {
       "Cao": tasks.filter(t => t.priority === "Cao").length,
       "Trung bình": tasks.filter(t => t.priority === "Trung bình").length,
       "Thấp": tasks.filter(t => t.priority === "Thấp").length,
     };
 
-    // Chi tiết trạng thái
     const statusCounts = {
       "Hoàn thành": completed,
       "Đang thực hiện": tasks.filter(t => t.status === "Đang thực hiện" || t.status === "Chờ").length,
@@ -286,7 +338,10 @@ export const TaskProvider = ({ children }) => {
       stats,
       CURRENT_DATE,
       user,
-      loginUser
+      loginUser,
+      logoutUser,
+      registeredUsers,
+      deleteRegisteredUser,
     }}>
       {children}
     </TaskContext.Provider>

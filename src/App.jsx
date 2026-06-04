@@ -7,6 +7,7 @@ import TasksPage from './pages/TasksPage';
 import CalendarPage from './pages/CalendarPage';
 import StatsPage from './pages/StatsPage';
 import SettingsPage from './pages/SettingsPage';
+import AdminPage from './pages/AdminPage';
 import TaskFormModal from './components/tasks/TaskFormModal';
 import PomodoroTimer from './components/common/PomodoroTimer';
 import LoginPage from './pages/LoginPage';
@@ -72,6 +73,11 @@ function AppContent() {
 
   if (!user) {
     return <LoginPage />;
+  }
+
+  // Admin được chuyển thẳng đến trang quản trị
+  if (user.role === 'admin') {
+    return <AdminPage />;
   }
 
   return (
